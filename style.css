@@ -1,0 +1,1052 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Fredoka', cursive, sans-serif;
+}
+
+body {
+    background-color: #f6f3eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 30px;
+}
+
+/* MARCO PRINCIPAL */
+.pantalla-juego {
+    background-color: #fbf9f1;
+    border: 5px solid #1e1e1e;
+    border-radius: 28px;
+    padding: 45px 55px;
+    width: 98%;
+    max-width: 1250px;
+    box-shadow: 12px 12px 0px #1e1e1e;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+.oculta {
+    display: none !important;
+}
+
+/* ================= MENÚ PRINCIPAL ================= */
+.contenido-menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 60px;
+}
+
+.columna-izquierda, .columna-derecha {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.banner-titulo {
+    text-align: center;
+    width: 95%;
+}
+
+.titulo-juego {
+    font-size: 5.8rem;
+    line-height: 1.15;
+    color: #1e1e1e;
+    margin: 10 10 0px 0;
+    text-shadow: 4px 4px 0px #e2d9c0;
+    text-align: center;
+}
+
+.titulo-juego .resaltado {
+    color: #2e7d32;
+    font-size: 5.6rem;
+    background: #e2f0d9;
+    padding: 4px 20px;
+    border-radius: 16px;
+    border: 4px solid #1e1e1e;
+    display: inline-block;
+    transform: rotate(-2deg);
+    margin-top: 8px;
+}
+
+.seccion-modos {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.btn-modo {
+    background-color: #d1e8ff;
+    border: 4px solid #1e1e1e;
+    color: #1e1e1e;
+    padding: 20px;
+    font-size: 1.7rem;
+    font-weight: 700;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 6px 6px 0px #1e1e1e;
+    text-align: center;
+    width: 100%;
+}
+
+.btn-modo.deshabilitado {
+    background-color: #e0e0e0;
+    opacity: 0.65;
+    cursor: not-allowed;
+    box-shadow: 3px 3px 0px #1e1e1e;
+}
+
+.subtitulo-seccion {
+    font-size: 2.1rem;
+    color: #1e1e1e;
+    margin: 0 0 25px 0;
+    border-bottom: 4px solid #1e1e1e;
+    padding-bottom: 8px;
+}
+
+.grid-avatares {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 35px;
+    justify-content: space-between;
+}
+
+.avatar-card {
+    background: #e8dff5;
+    border: 4px solid #1e1e1e;
+    border-radius: 20px;
+    padding: 12px 10px;
+    cursor: pointer;
+    flex: 1;
+    height: 155px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 5px 5px 0px #1e1e1e;
+    transition: all 0.15s ease;
+}
+
+.img-avatar-file {
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.nombre-avatar {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e1e1e;
+}
+
+.avatar-card.seleccionado {
+    background-color: #ffe599;
+    transform: translateY(-8px) scale(1.06);
+    box-shadow: 7px 11px 0px #1e1e1e;
+}
+
+.seccion-nombre {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.seccion-nombre label {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #1e1e1e;
+}
+
+.seccion-nombre input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 4px solid #1e1e1e;
+    padding: 8px;
+    font-size: 1.5rem;
+    color: #1e1e1e;
+    outline: none;
+}
+
+.contenedor-boton-iniciar {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.btn-iniciar {
+    background-color: #d5e8d4;
+    border: 4.5px solid #1e1e1e;
+    color: #1e1e1e;
+    padding: 18px 90px;
+    font-size: 2.3rem;
+    font-weight: 700;
+    border-radius: 22px;
+    cursor: pointer;
+    box-shadow: 7px 7px 0px #1e1e1e;
+    transition: all 0.15s ease;
+}
+
+.btn-iniciar:hover {
+    background-color: #c3e6b5;
+    transform: translate(-3px, -3px);
+    box-shadow: 10px 10px 0px #1e1e1e;
+}
+
+/* ================= MAPA DEL CAMPUS ================= */
+#pantalla-mapa {
+    position: relative;
+    min-height: 680px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.contenedor-superior-mapa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    z-index: 10;
+}
+
+.cartel-mapa {
+    background-color: #fff2cc;
+    border: 4.5px solid #1e1e1e;
+    border-radius: 22px;
+    padding: 16px 35px;
+    font-size: 2.3rem;
+    font-weight: 700;
+    color: #1e1e1e;
+    box-shadow: 7px 7px 0px #1e1e1e;
+    transform: rotate(-1.5deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.estado-academico-box {
+    background-color: #ffffff;
+    border: 4.5px solid #1e1e1e;
+    border-radius: 22px;
+    padding: 16px 26px;
+    box-shadow: 7px 7px 0px #1e1e1e;
+    min-width: 350px;
+}
+
+.titulo-estado {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1e1e1e;
+    text-align: center;
+    border-bottom: 3.5px solid #1e1e1e;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+}
+
+.cuerpo-estado {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.avatar-hud-box {
+    width: 80px;
+    height: 80px;
+    background: #e8dff5;
+    border: 3.5px solid #1e1e1e;
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.img-hud-file {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.info-estado {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.linea-estado {
+    font-size: 1.35rem;
+    color: #1e1e1e;
+}
+
+.linea-estado strong {
+    color: #2e7d32;
+}
+
+.zona-mapa-canvas {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background-image: url('Mapa campus.png'); 
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 3px solid #1e1e1e;
+}
+
+.nodo-m {
+    position: absolute;
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    border: 4px solid #1e1e1e;
+    background-color: #e8dff5;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e1e1e;
+    cursor: pointer;
+    box-shadow: 0px 6px 0px #1e1e1e;
+    transition: all 0.15s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+}
+
+.nodo-m.desbloqueado {
+    background-color: #fff2cc;
+}
+
+.nodo-m.seleccionado {
+    background-color: #ffe599;
+    transform: scale(1.16);
+    box-shadow: 0px 8px 0px #1e1e1e;
+}
+
+.nodo-m.bloqueado {
+    background-color: #d3d3d3;
+    opacity: 0.75;
+    cursor: not-allowed;
+    box-shadow: 0px 4px 0px #1e1e1e;
+}
+
+.nodo-m.s9-final {
+    width: 105px;
+    height: 105px;
+    font-size: 1.45rem;
+    background-color: #e8dff5;
+}
+
+.s1 { top: 60%; left: 13%; }
+.s2 { top: 38%; left: 23%; }
+.s3 { top: 26%; left: 36%; }
+.s5 { top: 52%; left: 39%; }
+.s4 { top: 40%; left: 51%; }
+.s6 { top: 66%; left: 47%; }
+.s7 { top: 70%; left: 61%; }
+.s8 { top: 56%; left: 71%; }
+.s9-final { top: 42%; left: 84%; }
+
+.btn-iniciar-mapa {
+    position: absolute;
+    bottom: 18px;
+    left: 22px;
+    background-color: #d1e8ff;
+    border: 4px solid #1e1e1e;
+    color: #1e1e1e;
+    padding: 14px 48px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 5px 5px 0px #1e1e1e;
+    transition: all 0.15s ease;
+    z-index: 10;
+}
+
+.btn-iniciar-mapa:hover {
+    background-color: #baddff;
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0px #1e1e1e;
+}
+
+/* Estilos para la Pantalla 3 (El Aula) */
+.zona-aula-contenido {
+    max-width: 800px;
+    margin: 30px auto;
+    background: #fff;
+    border: 4px solid #1e1e1e;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 6px 6px 0px #1e1e1e;
+}
+
+.caja-instrucciones h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #1e1e1e;
+}
+
+.caja-instrucciones ul {
+    text-align: left;
+    margin: 20px 0;
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+.grid-opciones {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.btn-opcion {
+    background-color: #f8f9fa;
+    border: 3px solid #1e1e1e;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    box-shadow: 3px 3px 0px #1e1e1e;
+    transition: all 0.1s ease;
+}
+
+.btn-opcion:hover {
+    background-color: #fff2cc;
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0px #1e1e1e;
+}
+
+.caja-retro {
+    text-align: center;
+    padding: 20px;
+}
+
+.caja-retro h3 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.caja-retro p {
+    font-size: 1.2rem;
+    background: #f1f3f5;
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px dashed #1e1e1e;
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.oculta {
+    display: none !important;
+}
+
+
+
+/* ==================== AJUSTE RECTANGULAR HORIZONTAL - PANTALLA 3 ==================== */
+
+#pantalla-aula {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Hacemos que el contenedor principal del aula sea una tarjeta rectangular ancha */
+.zona-aula-contenido {
+    background: #ffffff;
+    border: 5px solid #1e1e1e;
+    border-radius: 20px;
+    padding: 25px 35px;
+    box-shadow: 8px 8px 0px #1e1e1e;
+    min-height: 220px; /* Le da una proporción fija rectangular horizontal */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Estilo compacto y horizontal para la caja de instrucciones */
+.caja-instrucciones {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.caja-instrucciones h2 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.caja-instrucciones p {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+.caja-instrucciones ul {
+    text-align: left;
+    margin: 5px 0 15px 0;
+    line-height: 1.4;
+    font-size: 0.88rem;
+    padding-left: 20px;
+}
+
+.caja-instrucciones ul li {
+    margin-bottom: 4px;
+}
+
+/* Botón de entendido adaptado al rectángulo */
+.caja-instrucciones .btn-iniciar {
+    padding: 10px 30px;
+    font-size: 1.2rem;
+    align-self: center;
+}
+
+/* Opciones de preguntas en dos columnas equilibradas */
+.grid-opciones {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 15px 0;
+}
+
+.btn-opcion {
+    padding: 10px 15px;
+    font-size: 0.95rem;
+}
+
+/* Estilo limpio y centrado para la retroalimentación sin paso a paso */
+.caja-retro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.caja-retro h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 20px 0;
+}
+
+.img-reaccion-file {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+/* Estilo para el botón de pista con GIF */
+.btn-pista-gif {
+    background: #fff2cc;
+    border: 3px solid #1e1e1e;
+    border-radius: 12px;
+    padding: 8px 15px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 3px 3px 0px #1e1e1e;
+}
+
+.img-pista-icon {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+/* ==================== ESTILO FIEL AL BOCETO DE PREGUNTAS ==================== */
+
+/* Contenedor general del aula estilo boceto */
+#pantalla-aula.pantalla-juego {
+    max-width: 950px !important;
+    background: #fdfbf7 !important;
+    border: 4px solid #1e1e1e !important;
+    border-radius: 16px !important;
+    padding: 20px !important;
+    box-shadow: 6px 6px 0px #1e1e1e !important;
+}
+
+/* Encabezado superior tipo barra del boceto */
+#pantalla-aula .contenedor-superior-mapa {
+    background: #ffffff !important;
+    border: 3px solid #1e1e1e !important;
+    border-radius: 12px !important;
+    padding: 10px 20px !important;
+    margin-bottom: 15px !important;
+    box-shadow: 3px 3px 0px #1e1e1e !important;
+}
+
+/* Contenido interior organizado como el boceto */
+#pantalla-aula .zona-aula-contenido {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+/* Caja verde central para la pregunta (exacta al boceto) */
+.caja-instrucciones, .caja-pregunta {
+    background: #d8f3dc !important; /* Verde pastel suave del boceto */
+    border: 4px solid #1e1e1e !important;
+    border-radius: 18px !important;
+    padding: 25px !important;
+    box-shadow: 5px 5px 0px #1e1e1e !important;
+    text-align: center;
+}
+
+.caja-pregunta h3#enunciado-pregunta {
+    font-size: 1.25rem !important;
+    color: #1e1e1e !important;
+    line-height: 1.4;
+    margin-bottom: 20px !important;
+    font-weight: 700;
+}
+
+/* Cuadrícula de 2x2 para las opciones con los colores pasteles del boceto */
+.grid-opciones {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px !important;
+    margin-top: 20px !important;
+}
+
+/* Colores personalizados para cada botón de opción basados en el boceto */
+.grid-opciones .btn-opcion:nth-child(1) {
+    background-color: #b5e2fa !important; /* Celeste pastel */
+}
+.grid-opciones .btn-opcion:nth-child(2) {
+    background-color: #ffcad4 !important; /* Salmón / Rosa pastel */
+}
+.grid-opciones .btn-opcion:nth-child(3) {
+    background-color: #fcf6bd !important; /* Amarillo pastel */
+}
+.grid-opciones .btn-opcion:nth-child(4) {
+    background-color: #cddafd !important; /* Azul lavanda pastel */
+}
+
+.btn-opcion {
+    border: 3px solid #1e1e1e !important;
+    border-radius: 12px !important;
+    padding: 15px !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    color: #1e1e1e !important;
+    box-shadow: 3px 3px 0px #1e1e1e !important;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.btn-opcion:hover {
+    transform: translateY(-2px);
+    filter: brightness(0.95);
+}
+
+/* ==================== ESTILOS IDÉNTICOS AL BOCETO ==================== */
+
+#pantalla-aula.pantalla-juego {
+    max-width: 1000px !important;
+    background: #fdfbf7 !important;
+    border: 5px solid #1e1e1e !important;
+    border-radius: 20px !important;
+    padding: 25px !important;
+    box-shadow: 8px 8px 0px #1e1e1e !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+}
+
+/* Barra superior exacta al boceto */
+.barra-superior-boceto {
+    background: #ffffff;
+    border: 3px solid #1e1e1e;
+    border-radius: 12px;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    box-shadow: 4px 4px 0px #1e1e1e;
+}
+
+/* Zona principal de 3 columnas (Avatar | Caja Verde | Pista) */
+.zona-boceto-principal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* Columna izquierda: Avatar y Nombre */
+.avatar-zona-boceto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffff;
+    border: 3px solid #1e1e1e;
+    border-radius: 14px;
+    padding: 15px;
+    width: 140px;
+    box-shadow: 4px 4px 0px #1e1e1e;
+}
+
+.img-avatar-boceto {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+    margin-bottom: 8px;
+}
+
+.nombre-avatar-boceto {
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+/* Columna central: Gran caja verde pastel (Preguntas / Instrucciones) */
+.caja-verde-boceto {
+    flex: 1;
+    background: #d8f3dc; /* Verde pastel del boceto */
+    border: 4px solid #1e1e1e;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 6px 6px 0px #1e1e1e;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Columna derecha: Botón de Pista */
+.pista-zona-boceto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btn-pista-boceto {
+    background: #fff2cc;
+    border: 3px solid #1e1e1e;
+    border-radius: 14px;
+    padding: 12px 15px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 4px 4px 0px #1e1e1e;
+    transition: transform 0.1s ease;
+}
+
+.btn-pista-boceto:hover {
+    transform: scale(1.05);
+}
+
+.img-pista-icon {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+}
+
+/* Tipografía de preguntas y textos dentro de la caja verde */
+.caja-instrucciones-boceto h2, .caja-pregunta-boceto h3 {
+    font-size: 1.3rem;
+    color: #1e1e1e;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.caja-instrucciones-boceto p {
+    font-size: 1.05rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.progreso-interno-boceto {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+/* Cuadrícula de 2x2 para las opciones con los colores pasteles del boceto */
+.grid-opciones-boceto {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.grid-opciones-boceto .btn-opcion:nth-child(1) { background-color: #b5e2fa !important; } /* Celeste */
+.grid-opciones-boceto .btn-opcion:nth-child(2) { background-color: #ffcad4 !important; } /* Salmón */
+.grid-opciones-boceto .btn-opcion:nth-child(3) { background-color: #fcf6bd !important; } /* Amarillo */
+.grid-opciones-boceto .btn-opcion:nth-child(4) { background-color: #cddafd !important; } /* Lavanda */
+
+.btn-opcion {
+    border: 3px solid #1e1e1e !important;
+    border-radius: 12px !important;
+    padding: 12px 15px !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: #1e1e1e !important;
+    box-shadow: 3px 3px 0px #1e1e1e !important;
+    cursor: pointer;
+    text-align: left;
+    transition: transform 0.1s ease;
+}
+
+.btn-opcion:hover {
+    transform: translateY(-2px);
+    filter: brightness(0.95);
+}
+
+/* Estilo para la pantalla de retroalimentación centrada */
+.caja-retro-boceto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.caja-retro-boceto h3 {
+    font-size: 1.5rem;
+    margin: 15px 0;
+    font-weight: 700;
+}
+
+.img-reaccion-file {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.oculta {
+    display: none !important;
+}
+
+/* Forzar ocultamiento absoluto para que no se encimen las pantallas */
+.oculta {
+    display: none !important;
+}
+
+/* Estilo limpio y ordenado con viñetas para las instrucciones */
+.lista-instrucciones-ordenada {
+    text-align: left;
+    margin: 10px auto 15px auto;
+    padding-left: 20px;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    max-width: 600px;
+}
+
+.lista-instrucciones-ordenada li {
+    margin-bottom: 8px;
+}
+
+/* ==================== LETRAS MÁS GRANDES Y BOTÓN DE PISTA DESTACADO ==================== */
+
+/* Letras más grandes en las reglas de la Pantalla 3 */
+.caja-instrucciones-boceto h2 {
+    font-size: 1.6rem !important;
+    margin-bottom: 15px !important;
+}
+
+.lista-instrucciones-ordenada {
+    font-size: 1.15rem !important; /* Letras de reglas más grandes y cómodas */
+    line-height: 1.6 !important;
+}
+
+.lista-instrucciones-ordenada li {
+    margin-bottom: 10px !important;
+}
+
+/* Letras más grandes para el enunciado de la pregunta */
+#enunciado-pregunta {
+    font-size: 1.35rem !important; /* Enunciado amplio y fácil de leer */
+    line-height: 1.5 !important;
+    margin-bottom: 20px !important;
+}
+
+/* Letras más grandes para las 4 opciones de respuesta */
+.btn-opcion {
+    font-size: 1.15rem !important; /* Opciones con texto más grande */
+    padding: 15px 18px !important;
+}
+
+/* Botón de pista un poco más grande, llamativo y cómodo con su GIF */
+.btn-pista-gif {
+    background: #fff2cc !important;
+    border: 4px solid #1e1e1e !important;
+    border-radius: 14px !important;
+    padding: 12px 20px !important; /* Más grande */
+    font-family: 'Fredoka', sans-serif !important;
+    font-size: 1.1rem !important; /* Texto de pista más grande */
+    font-weight: 700 !important;
+    cursor: pointer;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    box-shadow: 4px 4px 0px #1e1e1e !important;
+    transition: transform 0.1s ease;
+}
+
+.btn-pista-gif:hover {
+    transform: scale(1.05);
+}
+
+.btn-pista-gif img {
+    width: 32px !important; /* GIF del foquito más grande */
+    height: 32px !important;
+    object-fit: contain;
+}
+
+@keyframes flotar {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Pantalla final: oculta al comenzar */
+#pantalla-graduacion {
+    display: none;
+}
+
+/* ==================== PANTALLA FINAL DE GRADUACIÓN: FORMATO HORIZONTAL ==================== */
+#pantalla-graduacion {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 24px 32px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    z-index: 9999 !important;
+}
+
+/* Evita que el documento genere scroll mientras se muestra la graduación */
+body:has(#pantalla-graduacion:not(.oculta)) {
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+
+#pantalla-graduacion .barra-superior-boceto {
+    top: 18px !important;
+    width: min(94%, 1250px) !important;
+    max-width: 1250px !important;
+}
+
+#pantalla-graduacion .graduacion-contenido {
+    width: min(96vw, 1320px) !important;
+    max-width: 1320px !important;
+    height: calc(100% - 85px) !important;
+    max-height: 760px !important;
+    margin-top: 58px !important;
+    padding: 0 12px !important;
+    gap: clamp(22px, 4vw, 65px) !important;
+}
+
+#pantalla-graduacion .graduacion-tarjeta {
+    flex: 1 1 760px !important;
+    width: 100% !important;
+    max-width: 760px !important;
+    padding: clamp(22px, 2.5vw, 38px) !important;
+}
+
+#pantalla-graduacion .graduacion-tarjeta h2 {
+    font-size: clamp(1.7rem, 2.3vw, 2.35rem) !important;
+    margin-bottom: 14px !important;
+}
+
+#pantalla-graduacion .graduacion-tarjeta > p {
+    font-size: clamp(1rem, 1.35vw, 1.3rem) !important;
+    margin-bottom: 18px !important;
+}
+
+#pantalla-graduacion .graduacion-tarjeta > div {
+    padding: 20px 24px !important;
+    margin-bottom: 20px !important;
+    font-size: clamp(1rem, 1.25vw, 1.2rem) !important;
+    line-height: 1.55 !important;
+}
+
+#pantalla-graduacion .graduacion-decoraciones {
+    flex: 0 0 130px !important;
+    height: min(58vh, 470px) !important;
+}
+
+#pantalla-graduacion .graduacion-decoraciones img {
+    width: 105px !important;
+    height: 105px !important;
+}
+
+#pantalla-graduacion .graduacion-tarjeta button {
+    font-size: 1.2rem !important;
+    padding: 14px 32px !important;
+}
+
+/* En pantallas pequeñas, conservar todo visible sin forzar el formato horizontal */
+@media (max-width: 760px) {
+    #pantalla-graduacion {
+        padding: 78px 14px 16px !important;
+        overflow-y: auto !important;
+    }
+    #pantalla-graduacion .graduacion-contenido {
+        height: auto !important;
+        max-height: none !important;
+        margin-top: 0 !important;
+        gap: 8px !important;
+    }
+    #pantalla-graduacion .graduacion-decoraciones {
+        flex-basis: 48px !important;
+        height: 260px !important;
+    }
+    #pantalla-graduacion .graduacion-decoraciones img {
+        width: 48px !important;
+        height: 48px !important;
+    }
+    #pantalla-graduacion .graduacion-tarjeta {
+        padding: 16px !important;
+    }
+    #pantalla-graduacion .graduacion-tarjeta > div {
+        padding: 12px !important;
+        font-size: 0.85rem !important;
+    }
+}
+
+@media (max-height: 650px) and (min-width: 761px) {
+    #pantalla-graduacion { padding-top: 12px !important; padding-bottom: 12px !important; }
+    #pantalla-graduacion .graduacion-contenido { margin-top: 48px !important; height: calc(100% - 65px) !important; }
+    #pantalla-graduacion .graduacion-decoraciones { height: 270px !important; }
+    #pantalla-graduacion .graduacion-decoraciones img { width: 78px !important; height: 78px !important; }
+    #pantalla-graduacion .graduacion-tarjeta { padding: 18px !important; }
+    #pantalla-graduacion .graduacion-tarjeta > div { padding: 12px 16px !important; margin-bottom: 12px !important; }
+}

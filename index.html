@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrera al Éxito</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" type="image/png" href="favicon.png" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/png" href="favicon blanco.png" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+
+    <!-- ==================== MÚSICA DE FONDO AUTOMÁTICA ==================== -->
+    <!-- ESTILO PARA EL BOTÓN FLOTANTE DE MÚSICA -->
+    <style>
+        .btn-audio-flotante {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: #fff2cc;
+            border: 4px solid #1e1e1e;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            box-shadow: 4px 4px 0px #1e1e1e;
+            transition: all 0.15s ease;
+        }
+        .btn-audio-flotante:hover {
+            transform: scale(1.1);
+            background-color: #ffe599;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== MÚSICA DE FONDO LOCAL ==================== -->
+    <audio id="musica-fondo" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+        Tu navegador no soporta elementos de audio.
+    </audio>
+
+    <!-- ==================== BOTÓN FLOTANTE DE MÚSICA ==================== -->
+    <button class="btn-audio-flotante" id="btnAudio" onclick="toggleMusica()" title="Silenciar / Activar Música">
+        🎵
+    </button>
+
+    <!-- ==================== PANTALLA 1: MENÚ PRINCIPAL ==================== -->
+    <div id="pantalla-menu" class="pantalla-juego">
+        
+        <div class="contenido-menu">
+            
+            <!-- COLUMNA IZQUIERDA -->
+            <div class="columna-izquierda">
+                <div class="banner-titulo">
+                    <h1 class="titulo-juego">Carrera al<br><span class="resaltado">Éxito</span></h1>
+                </div>
+            </div>
+
+            <!-- COLUMNA DERECHA -->
+            <div class="columna-derecha">
+                <h2 class="subtitulo-seccion">Selección de personaje</h2>
+                
+                <div class="grid-avatares">
+                    <div class="avatar-card" onclick="seleccionarPersonaje('arthur.gif', this)">
+                        <img src="arthur.gif" alt="Arthur" class="img-avatar-file" onerror="this.onerror=null; this.src='https://api.iconify.design/fluent-emoji-flat:person-student-light.svg';">
+                        <span class="nombre-avatar">Arthur</span>
+                    </div>
+                    <div class="avatar-card" onclick="seleccionarPersonaje('ellie.gif', this)">
+                        <img src="ellie.gif" alt="Ellie" class="img-avatar-file" onerror="this.onerror=null; this.src='https://api.iconify.design/fluent-emoji-flat:woman-student-light.svg';">
+                        <span class="nombre-avatar">Ellie</span>
+                    </div>
+                    <div class="avatar-card" onclick="seleccionarPersonaje('odiseo.gif', this)">
+                        <img src="odiseo.gif" alt="Odiseo" class="img-avatar-file" onerror="this.onerror=null; this.src='https://api.iconify.design/fluent-emoji-flat:man-student-light.svg';">
+                        <span class="nombre-avatar">Odiseo</span>
+                    </div>
+                    <div class="avatar-card" onclick="seleccionarPersonaje('freya.gif', this)">
+                        <img src="freya.gif" alt="Freya" class="img-avatar-file" onerror="this.onerror=null; this.src='https://api.iconify.design/fluent-emoji-flat:woman-teacher-light.svg';">
+                        <span class="nombre-avatar">Freya</span>
+                    </div>
+                </div>
+
+                <div class="seccion-nombre">
+                    <label for="nombreJugador">Nombre:</label>
+                    <input type="text" id="nombreJugador" placeholder="Escribe tu nombre aquí...">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="contenedor-boton-iniciar">
+            <button class="btn-iniciar" onclick="iniciarCarrera()">Iniciar</button>
+        </div>
+
+    </div>
+
+    <!-- ==================== PANTALLA 2: MAPA DEL CAMPUS ==================== -->
+    <div id="pantalla-mapa" class="pantalla-juego oculta">
+        
+        <!-- ENCABEZADO BALANCEADO -->
+        <div class="contenedor-superior-mapa">
+            <div class="cartel-mapa">
+                <span>📍 Mapa del Campus</span>
+            </div>
+
+            <div class="estado-academico-box">
+                <div class="titulo-estado">Estado Académico</div>
+                <div class="cuerpo-estado">
+                    <div class="avatar-hud-box">
+                        <img id="img-hud-personaje" src="arthur.gif" alt="Avatar HUD" class="img-hud-file">
+                    </div>
+                    <div class="info-estado">
+                        <div class="linea-estado">Jugador: <strong id="hud-nombre">---</strong></div>
+                        <div class="linea-estado">Promedio: <strong id="hud-promedio">0.0</strong></div>
+                        <div class="linea-estado">Capital: <strong id="hud-capital">$0 COP</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ZONA DEL MAPA CON LA ILUSTRACIÓN Y BOTONES -->
+        <div class="zona-mapa-canvas">
+            <button class="nodo-m s1 desbloqueado seleccionado" id="nodo-1" onclick="seleccionarSemestre(1)">1</button>
+            <button class="nodo-m s2 bloqueado" id="nodo-2" onclick="seleccionarSemestre(2)" disabled>2</button>
+            <button class="nodo-m s3 bloqueado" id="nodo-3" onclick="seleccionarSemestre(3)" disabled>3</button>
+            <button class="nodo-m s4 bloqueado" id="nodo-4" onclick="seleccionarSemestre(4)" disabled>4</button>
+            <button class="nodo-m s5 bloqueado" id="nodo-5" onclick="seleccionarSemestre(5)" disabled>5</button>
+            <button class="nodo-m s6 bloqueado" id="nodo-6" onclick="seleccionarSemestre(6)" disabled>6</button>
+            <button class="nodo-m s7 bloqueado" id="nodo-7" onclick="seleccionarSemestre(7)" disabled>7</button>
+            <button class="nodo-m s8 bloqueado" id="nodo-8" onclick="seleccionarSemestre(8)" disabled>8</button>
+            <button class="nodo-m s9-final bloqueado" id="nodo-9" onclick="seleccionarSemestre(9)" disabled>Final</button>
+
+            <!-- BOTÓN INICIAR ABAJO A LA IZQUIERDA -->
+            <button class="btn-iniciar-mapa" id="btn-rendir-parcial" onclick="rendirExamen()">Iniciar</button>
+        </div>
+
+    </div>
+
+<!-- ==================== PANTALLA 3: REGLAS / INSTRUCCIONES ==================== -->
+<div id="pantalla-reglas" class="pantalla-juego oculta">
+    
+    <!-- BARRA SUPERIOR -->
+    <div class="barra-superior-boceto">
+        <span id="titulo-semestre-reglas">Semestre 1</span>
+        <span>📖 Manual Académico</span>
+    </div>
+
+    <!-- CAJA CENTRAL DE REGLAS -->
+    <div class="zona-boceto-principal" style="justify-content: center;">
+        <div class="caja-verde-boceto" style="max-width: 700px; width: 100%;">
+            <div class="caja-instrucciones-boceto">
+                <h2>Manual de Supervivencia Académica</h2>
+                <ul class="lista-instrucciones-ordenada">
+                    <li>❤️ <strong>Vidas:</strong> Cuentas con 3 vidas por examen. Cada error resta una vida.</li>
+                    <li>📊 <strong>Aprobación:</strong> Debes responder al menos 2 de 3 preguntas correctamente para aprobar el semestre.</li>
+                    <li>💡 <strong>Pistas:</strong> Tienes 3 pistas disponibles para ayudarte en las preguntas difíciles.</li>
+                    <li>💰 <strong>Recompensas:</strong> Cada acierto suma a tu Promedio y acumula Capital en COP.</li>
+                </ul>
+                <button class="btn-iniciar" onclick="irAPreguntas()">¡Entendido, a estudiar!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ==================== PANTALLA 4: PREGUNTAS Y EXAMEN ==================== -->
+<div id="pantalla-preguntas" class="pantalla-juego oculta">
+    
+    <!-- Barra superior con Semestre, Vidas y Pistas -->
+    <div class="barra-superior-boceto">
+        <span id="titulo-semestre-preguntas">Semestre 1</span>
+        <div class="hud-derecha-superior" style="display: flex; gap: 20px; font-weight: 700;">
+            <span id="hud-vidas-preguntas">❤️ Vidas: 3/3</span>
+            <span id="hud-pistas-preguntas">💡 Pistas: 3/3</span>
+        </div>
+    </div>
+
+    <!-- Contenedor central: Avatar y Pista a la izquierda, Caja de Preguntas al centro/derecha -->
+    <div class="zona-boceto-principal" style="display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+        
+        <!-- COLUMNA IZQUIERDA: Avatar y Botón de Pista con GIF -->
+        <div class="columna-izquierda-boceto" style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+            <!-- Avatar -->
+            <div class="avatar-zona-boceto" style="display: flex; flex-direction: column; align-items: center; background: #ffffff; border: 3px solid #1e1e1e; border-radius: 14px; padding: 12px; width: 130px; box-shadow: 4px 4px 0px #1e1e1e;">
+                <img id="img-hud-preguntas" src="arthur.gif" alt="Avatar" class="img-avatar-boceto" style="width: 70px; height: 70px; object-fit: contain; margin-bottom: 5px;">
+                <span id="hud-nombre-preguntas" class="nombre-avatar-boceto" style="font-weight: 700; font-size: 1rem; text-align: center;">Jugador</span>
+            </div>
+
+            <!-- Botón de Pista con GIF -->
+            <button class="btn-pista-gif" onclick="usarPista()" title="Usar Pista" style="background: #fff2cc; border: 3px solid #1e1e1e; border-radius: 12px; padding: 10px 15px; font-family: 'Fredoka', sans-serif; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 3px 3px 0px #1e1e1e;">
+                <img src="pista.gif" alt="Pista" style="width: 25px; height: 25px; object-fit: contain;">
+                <span>Pista</span>
+            </button>
+        </div>
+
+        <!-- COLUMNA CENTRAL/DERECHA: Caja verde con preguntas u opciones -->
+        <div class="caja-verde-boceto" style="flex: 1; background: #d8f3dc; border: 4px solid #1e1e1e; border-radius: 18px; padding: 25px; box-shadow: 6px 6px 0px #1e1e1e;">
+            
+            <div id="seccion-pregunta" class="caja-pregunta-boceto">
+                <div class="progreso-interno-boceto" style="font-weight: 700; margin-bottom: 10px; font-size: 0.95rem;">
+                    <span id="txt-progreso-pregunta">Pregunta 1 de 3</span>
+                </div>
+                <h3 id="enunciado-pregunta" style="font-size: 1.2rem; margin-bottom: 20px; line-height: 1.4;">Enunciado de la pregunta...</h3>
+
+                <!-- 4 OPCIONES EN CUADRICULA PASTEL -->
+                <div class="grid-opciones-boceto" id="contenedor-opciones" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;"></div>
+            </div>
+
+            <!-- RETROALIMENTACIÓN / RESULTADO -->
+            <div id="seccion-retroalimentacion" class="caja-retro-boceto oculta" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <img id="gif-reaccion" src="" alt="Reacción" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px;">
+                <h3 id="titulo-resultado-parcial" style="font-size: 1.5rem; margin: 15px 0; font-weight: 700;">¡FELICIDADES! Seleccionaste la respuesta correcta</h3>
+                <button class="btn-iniciar" onclick="siguientePregunta()">Siguiente Pregunta ➡️</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<!-- ==================== PANTALLA 5: GRADUACIÓN Y CIERRE ==================== -->
+<div id="pantalla-graduacion" class="pantalla-juego oculta" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: relative; background: #f4f6f8; overflow: hidden;">
+    
+    
+        <!-- BARRA SUPERIOR DE LOGRO -->
+    <div class="barra-superior-boceto" style="position: absolute; top: 20px; width: 90%; max-width: 900px;">
+        <span>🎓 Carrera al Éxito</span>
+        <span>¡Meta Alcanzada!</span>
+    </div>
+
+    <!-- CONTENEDOR PRINCIPAL CON DECORACIONES INTERCALADAS A LOS LADOS -->
+    <div class="graduacion-contenido" style="display: flex; align-items: center; justify-content: center; gap: 40px; width: 100%; max-width: 1000px; padding: 0 20px; margin-top: 50px;">
+        
+        <!-- COLUMNA IZQUIERDA (Elementos intercalados: Graduada arriba, Dinero abajo) -->
+        <div class="graduacion-decoraciones" style="display: flex; flex-direction: column; justify-content: space-between; height: 350px; align-items: center;">
+            <img src="graduada.gif" alt="Graduada" style="width: 75px; height: 75px; object-fit: contain; animation: flotar 3s ease-in-out infinite;">
+            <img src="dinero.gif" alt="Dinero" style="width: 70px; height: 70px; object-fit: contain; animation: flotar 2.5s ease-in-out infinite alternate;">
+            <img src="diploma.gif" alt="Diploma" style="width: 70px; height: 70px; object-fit: contain; animation: flotar 3.5s ease-in-out infinite;">
+        </div>
+
+        <!-- TARJETA CENTRAL DE CALIFICACIÓN -->
+        <div class="caja-verde-boceto graduacion-tarjeta" style="flex: 1; max-width: 550px; background: #d8f3dc; border: 4px solid #1e1e1e; border-radius: 20px; padding: 30px; text-align: center; box-shadow: 8px 8px 0px #1e1e1e;">
+            <h2 style="font-size: 1.8rem; color: #1b4332; margin-bottom: 15px;">🎉 ¡TE HAS GRADUADO! 🎉</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 20px; font-weight: 600;">Facultad de Comunicación, Publicidad y Bellas Artes</p>
+            
+            <div style="background: #ffffff; border: 3px solid #1e1e1e; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left; font-size: 1.1rem; line-height: 1.6;">
+                <p>👤 <strong>Estudiante:</strong> <span id="res-nombre">Jugador</span></p>
+                <p>📊 <strong>Promedio Final:</strong> <span id="res-promedio" style="color: #2b8a3e; font-weight: bold;">5.0</span></p>
+                <p>💰 <strong>Capital Acumulado:</strong> <span id="res-capital" style="color: #2b8a3e; font-weight: bold;">$0 COP</span></p>
+                <p>🏆 <strong>Estado:</strong> Aprobación de Semestres 1 al 9 (Examen Final superado)</p>
+            </div>
+
+            <button class="btn-iniciar" onclick="reiniciarJuego()" style="font-size: 1.1rem; padding: 12px 25px;">🔄 Jugar de Nuevo</button>
+        </div>
+
+        <!-- COLUMNA DERECHA (Elementos intercalados: Dinero2 arriba, Graduado abajo) -->
+        <div class="graduacion-decoraciones" style="display: flex; flex-direction: column; justify-content: space-between; height: 350px; align-items: center;">
+            <img src="dinero2.gif" alt="Dinero 2" style="width: 70px; height: 70px; object-fit: contain; animation: flotar 2.8s ease-in-out infinite alternate;">
+            <img src="diploma2.gif" alt="Diploma 2" style="width: 70px; height: 70px; object-fit: contain; animation: flotar 3.2s ease-in-out infinite;">
+            <img src="graduado.gif" alt="Graduado" style="width: 75px; height: 75px; object-fit: contain; animation: flotar 3s ease-in-out infinite;">
+        </div>
+
+    </div>
+
+    
+
+</div>
+    <!-- ==================== JAVASCRIPT ==================== -->
+   <script>
+        // Configurar volumen inicial al cargar
+        window.addEventListener('DOMContentLoaded', () => {
+            const musica = document.getElementById('musica-fondo');
+            if (musica) {
+                musica.volume = 0.08; // 25% de volumen (suave y ambiental)
+                
+                // Intentar reproducir automáticamente (algunos navegadores lo permiten, otros no)
+                musica.play().then(() => {
+                    document.getElementById('btnAudio').innerText = "🔊";
+                }).catch(() => {
+                    document.getElementById('btnAudio').innerText = "🔇";
+                });
+            }
+        });
+
+        // Función del botón flotante para activar o mutear la música
+        function toggleMusica() {
+            const musica = document.getElementById('musica-fondo');
+            const btn = document.getElementById('btnAudio');
+            
+            if (musica.paused) {
+                musica.play();
+                btn.innerText = "🔊";
+            } else {
+                musica.pause();
+                btn.innerText = "🔇";
+            }
+        }
+
+        function seleccionarPersonaje(gifPath, elemento) {
+            document.querySelectorAll('.avatar-card').forEach(card => card.classList.remove('seleccionado'));
+            elemento.classList.add('seleccionado');
+            jugador.avatarGif = gifPath;
+        }
+
+        function iniciarCarrera() {
+            const nombreInput = document.getElementById('nombreJugador').value.trim();
+            
+            if (!jugador.avatarGif || jugador.avatarGif === "") {
+                alert("¡Por favor selecciona un personaje haciendo clic en su tarjeta!");
+                return;
+            }
+            if (nombreInput === "") {
+                alert("¡Por favor escribe el nombre de tu personaje!");
+                return;
+            }
+
+            jugador.nombre = nombreInput;
+
+            // Asegurar que la música suene al dar clic en iniciar si estaba pausada
+            const musica = document.getElementById('musica-fondo');
+            if (musica && musica.paused) {
+                musica.play();
+                document.getElementById('btnAudio').innerText = "🔊";
+            }
+
+            // Actualizar el HUD del Estado Académico
+            document.getElementById('hud-nombre').innerText = jugador.nombre;
+            document.getElementById('hud-promedio').innerText = jugador.promedio.toFixed(1);
+            document.getElementById('hud-capital').innerText = "$" + jugador.capital.toLocaleString() + " COP";
+            document.getElementById('img-hud-personaje').src = jugador.avatarGif;
+
+            // Cambiar de pantalla
+            document.getElementById('pantalla-menu').classList.add('oculta');
+            document.getElementById('pantalla-mapa').classList.remove('oculta');
+        }
+
+        function seleccionarSemestre(num) {
+            if (num > jugador.semestreActual) return;
+
+            jugador.semestreSeleccionado = num;
+            document.querySelectorAll('.nodo-m').forEach(nodo => nodo.classList.remove('seleccionado'));
+            
+            const nodoElegido = document.getElementById(`nodo-${num}`);
+            if (nodoElegido) nodoElegido.classList.add('seleccionado');
+        }
+
+        let jugador = {
+            nombre: "",
+            avatarGif: "",
+            semestreActual: 1,
+            semestreSeleccionado: 1,
+            promedio: 0.0,
+            capital: 0,
+            vidas: 3,
+            pistas: 3,
+            preguntaActualIndex: 0,
+            respuestasCorrectasSemestre: 0
+        };
+
+        // --- BANCO DE PREGUNTAS COMPLETO (24 preguntas: 3 por semestre) ---
+       // --- BANCO DE PREGUNTAS OFICIAL (Semestres 1 al 8 + Examen Final en el 9) ---
+        const bancoPreguntas = {
+            1: [
+                {
+                    enunciado: "Para el rodaje de un cortometraje publicitario, el equipo de producción cuenta con un presupuesto inicial en números enteros de -1,500,000 COP (deudas de alquiler previo) y recibe un patrocinio positivo de $4,500,000 COP. ¿Cuál es el saldo real disponible para utilería?",
+                    opciones: ["A) $2,000,000", "B) $3,000,000", "C) $6,000,000", "D) $1,500,000"],
+                    correcta: 1,
+                    pista: "Recuerda sumar el efecto de las deudas (−$1,5 millones) y los ingresos (+$4,5 millones)."
+                },
+                {
+                    enunciado: "Un diseñador gráfico está optimizando una ilustración digital y necesita calcular una escala fraccionaria exacta. Si tiene un segmento de 3/4 de pulgada y le suma 1/2 pulgada de margen técnico, ¿cuál es el ancho total resultante?",
+                    opciones: ["A) 5/4 de pulgada", "B) 4/6 de pulgada", "C) 2/3 de pulgada", "D) 7/8 de pulgada"],
+                    correcta: 0,
+                    pista: "Busca un denominador común antes de sumar las fracciones."
+                },
+                {
+                    enunciado: "En una exposición de arte contemporáneo, se distribuyen invitaciones VIP representadas mediante la raíz cuadrada del área total de la galería. Si el área es de 144 m², ¿cuántos metros mide cada lado simétrico de la galería principal?",
+                    opciones: ["A) 10 m", "B) 14 m", "C) 12 m", "D) 16 m"],
+                    correcta: 2,
+                    pista: "Piensa qué número multiplicado por sí mismo da 144."
+                }
+            ],
+            2: [
+                {
+                    enunciado: "En edición de video, la relación de aspecto cinematográfica estándar es 16:9. Si un editor simplifica esta fracción o analiza sus componentes decimales periódicos, ¿a qué conjunto numérico pertenece estrictamente el resultado de dividir 16 entre 9 (1.777...)?",
+                    opciones: ["A) Número Entero (Z)", "B) Número Irracional (I)", "C) Número Racional (Q)", "D) Número Natural (N)"],
+                    correcta: 2,
+                    pista: "Un número racional puede expresarse como una fracción de dos enteros."
+                },
+                {
+                    enunciado: "Al diseñar un logotipo modular, un publicista usa la proporción dorada basada en el número irracional π (3.14159...). ¿Por qué este valor se define específicamente como un número irracional?",
+                    opciones: [
+                        "A) Porque se puede expresar exactamente como una fracción de dos números enteros.",
+                        "B) Porque es un decimal finito exacto.",
+                        "C) Porque es un decimal infinito NO periódico que no puede expresarse como fracción a/b.",
+                        "D) Porque equivale exactamente a 22/7."
+                    ],
+                    correcta: 2,
+                    pista: "Busca el número decimal que no termina ni presenta un patrón periódico."
+                },
+                {
+                    enunciado: "Un diseñador multimedia mezcla dos pistas de audio cuyas duraciones ocupan fracciones de gigahercios en buffer: 2/3 GHz y 5/7 GHz. Para hallar el producto de rendimiento técnico, ¿cuál es el resultado de la multiplicación directa?",
+                    opciones: ["A) 10/21", "B) 7/10", "C) 14/15", "D) 12/35"],
+                    correcta: 0,
+                    pista: "Multiplica los numeradores entre sí y luego los denominadores."
+                }
+            ],
+            3: [
+                {
+                    enunciado: "Estás diseñando el plano en 2D para un estudio de fotografía publicitaria de forma triangular. Si la base del set mide b = 5 metros y la altura vertical es h = 4 metros, ¿cuál es el área superficial total del estudio en el plano?",
+                    opciones: ["A) 20 m²", "B) 10 m²", "C) 15 m²", "D) 9 m²"],
+                    correcta: 1,
+                    pista: "Multiplica la base por la altura y divide el resultado entre dos."
+                },
+                {
+                    enunciado: "Necesitas rodear con una cinta de marcaje de seguridad el contorno (perímetro) de un set de baile cuadrangular regular cuyas baldosas miden 4 metros por cada lado (s = 4). ¿Cuántos metros lineales de cinta se requieren?",
+                    opciones: ["A) 8 metros", "B) 12 metros", "C) 16 metros", "D) 20 metros"],
+                    correcta: 2,
+                    pista: "El cuadrado tiene cuatro lados iguales. ¿Qué pasa si sumas sus cuatro lados?"
+                },
+                {
+                    enunciado: "En una composición gráfica bidimensional, una línea recta representa un elemento unidimensional (1D) que se desplaza sobre el plano cartesiano midiendo una distancia lineal exacta desde el punto -3 hasta el punto +5. ¿Cuál es la longitud total de dicha línea?",
+                    opciones: ["A) 2 unidades", "B) 5 unidades", "C) 8 unidades", "D) -8 unidades"],
+                    correcta: 2,
+                    pista: "Calcula cuántas unidades hay desde −3 hasta +5 en la recta numérica."
+                }
+            ],
+            4: [
+                {
+                    enunciado: "Para un comercial animado en 3D, estás modelando un cubo perfecto que simula una caja de sorpresas corporativa. Si cada arista de la caja mide s = 3 metros, ¿cuál es el volumen total de espacio que ocupa el objeto?",
+                    opciones: ["A) 9 m³", "B) 18 m³", "C) 27 m³", "D) 36 m³"],
+                    correcta: 2,
+                    pista: "Eleva la medida de uno de sus lados a la tercera potencia."
+                },
+                {
+                    enunciado: "En la construcción de un set físico, se requiere edificar una columna publicitaria con forma de cilindro circular. Si el radio de la base es r = 2 metros y la altura de la columna es h = 5 metros, usando 3.14, ¿cuál es el volumen tridimensional del cilindro?",
+                    opciones: ["A) 31.4 m³", "B) 62.8 m³", "C) 20 m³", "D) 12.56 m³"],
+                    correcta: 1,
+                    pista: "Usa la fórmula V = π·r²·h: primero calcula el área de la base circular."
+                },
+                {
+                    enunciado: "Para calcular los costos de pintura en el área de superficie total de una estructura cúbica decorativa de 2 metros de arista (s = 2), ¿cuántos metros cuadrados de superficie suman todas sus caras?",
+                    opciones: ["A) 16 m²", "B) 24 m²", "C) 8 m²", "D) 12 m²"],
+                    correcta: 1,
+                    pista: "Calcula el área de una cara cuadrada y multiplícala por las seis caras."
+                }
+            ],
+            5: [
+                {
+                    enunciado: "Estás editando un vídeo cinematográfico y las especificaciones técnicas exigen una longitud de plano de 5 metros. Si necesitas reportar esta medida en centímetros para un informe técnico de imprenta, ¿cuál es el resultado aplicando el factor de conversión correcto (100 cm = 1 m)?",
+                    opciones: ["A) 50 cm", "B) 500 cm", "C) 5,000 cm", "D) 5 cm"],
+                    correcta: 1,
+                    pista: "Recuerda que cada metro equivale a 100 centímetros."
+                },
+                {
+                    enunciado: "En un proyecto de diseño web internacional, se comparan estándares de longitud. Si un banner publicitario mide 3 metros y se requiere estimar su equivalente aproximado en pies (ft) sabiendo que 1 m = 3.28 ft, ¿cuál es la medida en el sistema inglés?",
+                    opciones: ["A) 6.56 ft", "B) 9.84 ft", "C) 12.5 ft", "D) 3.28 ft"],
+                    correcta: 1,
+                    pista: "Multiplica los metros por el factor de conversión: 1 metro ≈ 3,28 pies."
+                },
+                {
+                    enunciado: "Un equipo de producción realiza una transmisión en streaming que dura 2 horas exactas. Para calcular la tasa de bits y el almacenamiento en el servidor, ¿a cuántos segundos equivale este tiempo?",
+                    opciones: ["A) 3,600 segundos", "B) 6,000 segundos", "C) 7,200 segundos", "D) 1,200 segundos"],
+                    correcta: 2,
+                    pista: "Convierte primero las horas a minutos y después los minutos a segundos."
+                }
+            ],
+            6: [
+                {
+                    enunciado: "En una agencia de publicidad, el costo total de una campaña se modela mediante la suma de dos polinomios de costos de pauta: (2x² + 5x) y (x² - 3x). Al simplificar agrupando términos semejantes, ¿cuál es la expresión algebraica resultante?",
+                    opciones: ["A) 3x² + 2x", "B) 3x² + 8x", "C) x² + 8x", "D) 2x⁴ + 2x²"],
+                    correcta: 0,
+                    pista: "Agrupa los términos que tienen la misma variable y el mismo exponente."
+                },
+                {
+                    enunciado: "Para calcular el valor numérico del rendimiento de una pauta digital donde la variable de clics es x = 2 y la de impresiones es y = -1, evaluamos el polinomio P(x, y) = 3x - 2y. ¿Cuál es el resultado numérico final?",
+                    opciones: ["A) 4", "B) 6", "C) 8", "D) 10"],
+                    correcta: 2,
+                    pista: "Sustituye cada variable por su valor, respetando los signos y el orden de las operaciones."
+                },
+                {
+                    enunciado: "Un diseñador realiza una multiplicación algebraica distributiva para calcular el área de un banner publicitario cuyas dimensiones están dadas por los binomios (x + 2)(x - 3). Al aplicar la propiedad distributiva (FOIL), ¿cuál es el trinomio resultante?",
+                    opciones: ["A) x² - x - 6", "B) x² + x - 6", "C) x² - 5x + 6", "D) x² + 5x + 6"],
+                    correcta: 0,
+                    pista: "Multiplica cada término del primer paréntesis por cada término del segundo."
+                }
+            ],
+            7: [
+                {
+                    enunciado: "Estás organizando un festival de cine y necesitas hallar el número de patrocinadores desconocidos (y) sumando una base operativa fija de 4 marcas aliadas para alcanzar una meta exacta de 10 entidades en total: y + 4 = 10. Aplicando la operación inversa (restar 4 en ambos lados), ¿cuál es el valor de y?",
+                    opciones: ["A) y = 4", "B) y = 6", "C) y = 14", "D) y = 2"],
+                    correcta: 1,
+                    pista: "Para dejar sola la variable, realiza la operación inversa en ambos lados de la igualdad."
+                },
+                {
+                    enunciado: "En un modelo de costos de producción audiovisual, el presupuesto se rige por la ecuación lineal de dos pasos: 2(3x - 1) = 28. Siguiendo la regla de oro para aislar la variable, ¿cuál es el valor correcto de la incógnita x?",
+                    opciones: ["A) x = 3", "B) x = 4", "C) x = 5", "D) x = 6"],
+                    correcta: 2,
+                    pista: "Distribuye el número que está fuera del paréntesis y luego despeja la variable."
+                },
+                {
+                    enunciado: "Si una ecuación representa el equilibrio financiero de una productora en forma de balanza, ¿cuál es la regla de oro fundamental que debes aplicar siempre en ambos lados de la igualdad para no alterar el resultado?",
+                    opciones: [
+                        "A) Lo que sumas, restas o multiplicas en un lado, debes hacerlo exactamente igual en el otro lado.",
+                        "B) Cambiar todas las variables por constantes aleatorias.",
+                        "C) Eliminar los signos negativos sin verificar la balanza.",
+                        "D) Multiplicar únicamente el primer miembro por cero."
+                    ],
+                    correcta: 0,
+                    pista: "Lo que hagas en un lado de la ecuación también debes hacerlo en el otro."
+                }
+            ],
+            8: [
+                {
+                    enunciado: "En una campaña de marketing digital en redes sociales, se analiza la razón entre visualizaciones de contenido publicitario: por cada 5 impresiones de anuncios dirigidos a mujeres hay 2 dirigidas a hombres. ¿Cómo se expresa correctamente esta razón matemática?",
+                    opciones: ["A) 2/5 o 2:5", "B) 5/2 o 5:2", "C) 7/2 o 7:2", "D) 5/7 o 5:7"],
+                    correcta: 1,
+                    pista: "Escribe primero la cantidad de mujeres y después la de hombres, respetando ese orden."
+                },
+                {
+                    enunciado: "En un estudio de tiempo y distancia para la distribución de material impreso, se observa que las magnitudes son directamente proporcionales (DP): si el tiempo aumenta, la distancia recorrida por el repartidor también aumenta de forma constante. Si en 1 hora recorre 10 km, en 2 horas recorre 20 km y en 3 horas recorre 30 km, ¿cuál es la propiedad fundamental que se aplica a la siguiente proporción? 5/2 = 10/4",
+                    opciones: ["A) 5 × 2 = 4 × 10", "B) 5 × 4 = 2 × 10", "C) 5 + 4 = 2 + 10", "D) 5 - 2 = 10 - 4"],
+                    correcta: 1,
+                    pista: "En una proporción, el producto de los extremos debe ser igual al producto de los medios."
+                },
+                {
+                    enunciado: "Una agencia lanza una promoción de diseño de marcas donde ofrece un descuento del 20 % en la tarifa final. Al convertir este porcentaje a su expresión fraccionaria simplificada y a su número decimal correspondiente, ¿cuáles son los valores correctos?",
+                    opciones: ["A) 1/2 y 0.5", "B) 1/5 y 0.2", "C) 3/4 y 0.75", "D) 1/4 y 0.25"],
+                    correcta: 1,
+                    pista: "Divide el porcentaje entre 100 para convertirlo en decimal; después simplifica la fracción."
+                }
+            ],
+            9: [
+                {
+                    enunciado: "[EXAMEN FINAL] Para el rodaje de un cortometraje publicitario, el equipo de producción cuenta con un presupuesto inicial en números enteros de -1,500,000 COP (deudas de alquiler previo) y recibe un patrocinio positivo de $4,500,000 COP. ¿Cuál es el saldo real disponible para utilería?",
+                    opciones: ["A) $2,000,000", "B) $3,000,000", "C) $6,000,000", "D) $1,500,000"],
+                    correcta: 1,
+                    pista: "¡Animo tu puedes!"
+                },
+                {
+                    enunciado: "[EXAMEN FINAL] Para un comercial animado en 3D, estás modelando un cubo perfecto que simula una caja de sorpresas corporativa. Si cada arista de la caja mide s = 3 metros, ¿cuál es el volumen total de espacio que ocupa el objeto?",
+                    opciones: ["A) 9 m³", "B) 18 m³", "C) 27 m³", "D) 36 m³"],
+                    correcta: 2,
+                    pista: "¡Animo tu puedes!"
+                },
+                {
+                    enunciado: "[EXAMEN FINAL] Una agencia lanza una promoción de diseño de marcas donde ofrece un descuento del 20 % en la tarifa final. Al convertir este porcentaje a su expresión fraccionaria simplificada y a su número decimal correspondiente, ¿cuáles son los valores correctos?",
+                    opciones: ["A) 1/2 y 0.5", "B) 1/5 y 0.2", "C) 3/4 y 0.75", "D) 1/4 y 0.25"],
+                    correcta: 1,
+                    pista: "¡Animo tu puedes!"
+                }
+            ]
+        };
+
+        // --- PANTALLA 3: ABRIR REGLAS DESDE EL MAPA ---
+        // --- PANTALLA 3: ABRIR REGLAS O IR DIRECTO A PREGUNTAS ---
+        function rendirExamen() {
+            document.getElementById('pantalla-menu').classList.add('oculta');
+            document.getElementById('pantalla-mapa').classList.add('oculta');
+            document.getElementById('pantalla-preguntas').classList.add('oculta');
+            document.getElementById('pantalla-reglas').classList.add('oculta');
+
+            // Si es el Semestre 1, mostramos primero las reglas (Pantalla 3)
+            if (jugador.semestreSeleccionado === 1) {
+                document.getElementById('pantalla-reglas').classList.remove('oculta');
+                document.getElementById('titulo-semestre-reglas').innerText = `Semestre 1`;
+            } else {
+                // Si es del Semestre 2 al 9, saltamos directo a las preguntas (Pantalla 4)
+                irAPreguntas();
+            }
+        }
+
+        // --- PANTALLA 4: PASAR DE REGLAS A PREGUNTAS ---
+        function irAPreguntas() {
+            document.getElementById('pantalla-reglas').classList.add('oculta');
+            document.getElementById('pantalla-preguntas').classList.remove('oculta');
+
+            // Configurar datos del HUD superior y el avatar a la derecha
+            document.getElementById('img-hud-preguntas').src = jugador.avatarGif;
+            document.getElementById('hud-nombre-preguntas').innerText = jugador.nombre;
+            document.getElementById('titulo-semestre-preguntas').innerText = `Semestre ${jugador.semestreSeleccionado}`;
+            document.getElementById('hud-vidas-preguntas').innerText = `❤️ Vidas: ${jugador.vidas}/3`;
+            document.getElementById('hud-pistas-preguntas').innerText = `💡 Pistas: ${jugador.pistas}/3`;
+
+            iniciarExamenSemestre();
+        }
+
+        function iniciarExamenSemestre() {
+            jugador.preguntaActualIndex = 0;
+            jugador.respuestasCorrectasSemestre = 0;
+            document.getElementById('seccion-pregunta').classList.remove('oculta');
+            document.getElementById('seccion-retroalimentacion').classList.add('oculta');
+            cargarPreguntaActual();
+        }
+
+        function cargarPreguntaActual() {
+            const s = jugador.semestreSeleccionado;
+            const preguntasSemestre = bancoPreguntas[s] || bancoPreguntas[1];
+            const p = preguntasSemestre[jugador.preguntaActualIndex];
+
+            document.getElementById('txt-progreso-pregunta').innerText = `Pregunta ${jugador.preguntaActualIndex + 1} de ${preguntasSemestre.length}`;
+            document.getElementById('hud-pistas-preguntas').innerText = `💡 Pistas: ${jugador.pistas}/3`;
+            document.getElementById('enunciado-pregunta').innerText = p.enunciado;
+
+            const contenedorOpciones = document.getElementById('contenedor-opciones');
+            contenedorOpciones.innerHTML = "";
+
+            p.opciones.forEach((opcion, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-opcion';
+                btn.innerText = opcion;
+                btn.onclick = () => verificarRespuesta(index);
+                contenedorOpciones.appendChild(btn);
+            });
+        }
+
+        function verificarRespuesta(indexElegido) {
+            const s = jugador.semestreSeleccionado;
+            const preguntasSemestre = bancoPreguntas[s] || bancoPreguntas[1];
+            const p = preguntasSemestre[jugador.preguntaActualIndex];
+
+            document.getElementById('seccion-pregunta').classList.add('oculta');
+            document.getElementById('seccion-retroalimentacion').classList.remove('oculta');
+
+            const tituloResultado = document.getElementById('titulo-resultado-parcial');
+            const imgReaccion = document.getElementById('gif-reaccion');
+
+            if (indexElegido === p.correcta) {
+                jugador.respuestasCorrectasSemestre++;
+                jugador.promedio = Math.min(5.0, jugador.promedio + 0.5);
+                jugador.capital += 250000;
+
+                tituloResultado.innerText = "¡FELICIDADES! Seleccionaste la respuesta correcta";
+                tituloResultado.style.color = "#2b8a3e";
+                imgReaccion.src = "bien.gif"; 
+            } else {
+                jugador.vidas--;
+                tituloResultado.innerText = "¡Respuesta Incorrecta! Sigue intentando";
+                tituloResultado.style.color = "#c92a2a";
+                imgReaccion.src = "mal.gif";
+
+                if (jugador.vidas <= 0) {
+                    alert("¡Te has quedado sin vidas! Reprobaste el semestre.");
+                    location.reload();
+                    return;
+                }
+            }
+
+            // Actualizar HUD superior con vidas actualizadas
+            document.getElementById('hud-vidas-preguntas').innerText = `❤️ Vidas: ${jugador.vidas}/3`;
+        }
+
+        function siguientePregunta() {
+            document.getElementById('seccion-retroalimentacion').classList.add('oculta');
+            jugador.preguntaActualIndex++;
+
+            const s = jugador.semestreSeleccionado;
+            const preguntasSemestre = bancoPreguntas[s] || bancoPreguntas[1];
+
+            // Si todavía quedan preguntas del semestre, mostrar la siguiente.
+            if (jugador.preguntaActualIndex < preguntasSemestre.length) {
+                document.getElementById('seccion-pregunta').classList.remove('oculta');
+                cargarPreguntaActual();
+                return;
+            }
+
+            // El examen del semestre terminó.
+            const aprobo = jugador.respuestasCorrectasSemestre >= 2;
+
+            if (aprobo) {
+                alert(`¡Felicitaciones! Aprobaste el Semestre ${s} con ${jugador.respuestasCorrectasSemestre}/3 aciertos.`);
+            } else {
+                alert(`Perdiste el semestre (${jugador.respuestasCorrectasSemestre}/3 aciertos). Necesitas al menos 2 para aprobar. ¡Inténtalo de nuevo!`);
+            }
+
+            // Si es el examen final, mostrar únicamente la pantalla de graduación al aprobar.
+            if (s === 9 && aprobo) {
+                document.getElementById('pantalla-menu').classList.add('oculta');
+                document.getElementById('pantalla-mapa').classList.add('oculta');
+                document.getElementById('pantalla-reglas').classList.add('oculta');
+                document.getElementById('pantalla-preguntas').classList.add('oculta');
+                document.getElementById('pantalla-graduacion').classList.remove('oculta');
+
+                document.getElementById('res-nombre').innerText = jugador.nombre;
+                document.getElementById('res-promedio').innerText = jugador.promedio.toFixed(1);
+                document.getElementById('res-capital').innerText = "$" + jugador.capital.toLocaleString() + " COP";
+                return;
+            }
+
+            // Desbloquear el siguiente semestre únicamente si aprobó.
+            if (aprobo && s < 9) {
+                jugador.semestreActual = Math.max(jugador.semestreActual, s + 1);
+                const siguienteNodo = document.getElementById(`nodo-${s + 1}`);
+                if (siguienteNodo) {
+                    siguienteNodo.classList.remove('bloqueado');
+                    siguienteNodo.classList.add('desbloqueado');
+                    siguienteNodo.removeAttribute('disabled');
+                }
+            }
+
+            // En semestres normales (o si no aprobó el final), regresar al mapa.
+            document.getElementById('pantalla-preguntas').classList.add('oculta');
+            document.getElementById('pantalla-mapa').classList.remove('oculta');
+            document.getElementById('pantalla-graduacion').classList.add('oculta');
+            document.getElementById('hud-promedio').innerText = jugador.promedio.toFixed(1);
+            document.getElementById('hud-capital').innerText = "$" + jugador.capital.toLocaleString() + " COP";
+        }
+
+        function usarPista() {
+            if (jugador.pistas > 0) {
+                const s = jugador.semestreSeleccionado;
+                const preguntasSemestre = bancoPreguntas[s] || bancoPreguntas[1];
+                const p = preguntasSemestre[jugador.preguntaActualIndex];
+
+                if (p && p.pista) {
+                    jugador.pistas--;
+                    document.getElementById('hud-pistas-preguntas').innerText = `💡 Pistas: ${jugador.pistas}/3`;
+                    alert(`💡 PISTA DEL PROFESOR:\n\n${p.pista}`);
+                } else {
+                    alert("💡 Pista institucional: Revisa detenidamente los apuntes y conceptos de la clase.");
+                }
+            } else {
+                alert("¡Ya no te quedan pistas disponibles en este examen!");
+            }
+        }
+        
+        function reiniciarJuego() {
+            location.reload();
+        }
+
+
+    </script>
+
+
+
+</body>
+</html>
